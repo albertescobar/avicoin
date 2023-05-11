@@ -10,7 +10,7 @@ if(empty($_COOKIE["usuari"]))
 echo "no hi ha cookie";
 
 if (isset($_POST['login'])) {
-
+//RECOLLIM DADES FORMULARI I COMPROBEM A BBDD
 $email = $_POST['email'];
 $password_user = $_POST['password'];
 
@@ -18,6 +18,7 @@ $query = $connection->prepare("SELECT * FROM usuario WHERE email='$email' AND pa
 $query->execute();
 $result = $query->fetch(PDO::FETCH_ASSOC);
 
+//EMMAGATZEMEM EN VARIABLES LA COSNULTA
 $nombre_bbdd = $result['nombre'];
 $email_bbdd = $result['email'];
 $password_bbdd = $result["password"];
@@ -33,7 +34,7 @@ $encryption_email_bbdd = openssl_encrypt($email_bbdd,$ciphering,$encryption_key,
 $encryption_password_bbdd = openssl_encrypt($password_bbdd,$ciphering,$encryption_key,$option,$encryption_iv);
 
 if($email_bbdd==$email && $password_user==$password_bbdd){
-echo "hola ";
+
 $usuari = array(
   "nombre_array" => $encryption_nombre_bbdd,
   "email_array" => $encryption_email_bbdd,
@@ -51,7 +52,7 @@ setcookie ("usuari",json_encode($usuari),time()+ (60*60*24*365),"/");
 
 }//end if isset cookie
 else{
-
+  //COMPROBACIÓ COOKIE
   $nom_cookie = $dencryption_nombre_bbdd;
   $email_cookie = $dencryption_email_bbdd;
   $password_cookie = $dencryption_password_bbdd;
@@ -67,6 +68,7 @@ else{
   echo "loggin con cokkie";
 
 }else {
+  //ERROR COOKIE, HAN CANVIAT LES DADES MENTRE LA COOKIE ESTAVA EMMAGATZEMADA
   echo "error loggin cookie";
 }
 }//end else cookie loggin
