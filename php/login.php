@@ -3,18 +3,11 @@ include('config.php');
 include('functions.php');
 session_start();
 
+//Comprobació si ho ha cookie
 if(empty($_COOKIE["usuari"]))
 {
-
+//No hi ha cookie
 echo "no hi ha cookie";
-}
-else{
-  loggin();
-  $nom_cookie = $dencryption_nombre_bbdd;
-  $email_cookie = $dencryption_email_bbdd;
-  $passwordcookie = $dencryption_password_bbdd;
-  echo "hi ha cookie ".$nom_cookie.$email_cookie.$passwordcookie;
-}
 
 if (isset($_POST['login'])) {
 
@@ -47,16 +40,34 @@ $usuari = array(
   "password_array" => $encryption_password_bbdd,
 
 );//end if
-
+echo "login formulari";
 //cookie amb array
 setcookie ("usuari",json_encode($usuari),time()+ (60*60*24*365),"/");
 }else{
-  echo "error login ";
+  echo "error login formulari";
 }//end else
 
 }//end if isset
 
-function loggin(){
-  echo "loggin";
+}//end if isset cookie
+else{
+
+  $nom_cookie = $dencryption_nombre_bbdd;
+  $email_cookie = $dencryption_email_bbdd;
+  $password_cookie = $dencryption_password_bbdd;
+
+  $query = $connection->prepare("SELECT * FROM usuario WHERE email='$email_cookie' AND password=$password_cookie");
+  $query->execute();
+  $result = $query->fetch(PDO::FETCH_ASSOC);
+
+  $nombre_bbdd_cookie = $result['nombre'];
+  $email_bbdd_cookie = $result['email'];
+  $password_bbdd_cookie = $result["password"];
+  if($email_bbdd_cookie==$email_cookie && $password_cookie==$password_bbdd_cookie){
+  echo "loggin con cokkie";
+
+}else {
+  echo "error loggin cookie";
 }
+}//end else cookie loggin
 ?>
