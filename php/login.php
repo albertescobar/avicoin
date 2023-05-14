@@ -7,7 +7,7 @@ session_start();
 if(empty($_COOKIE["usuari"]))
 {
 //No hi ha cookie
-echo "no hi ha cookie";
+//echo "no hi ha cookie";
 
 if (isset($_POST['login'])) {
 //RECOLLIM DADES FORMULARI I COMPROBEM A BBDD
@@ -41,11 +41,13 @@ $usuari = array(
   "password_array" => $encryption_password_bbdd,
 
 );//end if
-echo "login formulari";
+//echo "login formulari";
+header("Location: php/menu.php");
 //cookie amb array
 setcookie ("usuari",json_encode($usuari),time()+ (60*60*24*365),"/");
 }else{
-  echo "error login formulari";
+  header("Location: php/error_login.php");
+  //echo "error login formulari";
 }//end else
 
 }//end if isset
@@ -65,11 +67,13 @@ else{
   $email_bbdd_cookie = $result['email'];
   $password_bbdd_cookie = $result["password"];
   if($email_bbdd_cookie==$email_cookie && $password_cookie==$password_bbdd_cookie){
-  echo "loggin con cokkie";
+//  echo "loggin con cokkie";
+  header("Location: php/menu.php");
 
 }else {
   //ERROR COOKIE, HAN CANVIAT LES DADES MENTRE LA COOKIE ESTAVA EMMAGATZEMADA
-  echo "error loggin cookie";
+  //echo "error loggin cookie";
+      setcookie ("usuari","",time()- (60*60*24*365),"/");
 }
 }//end else cookie loggin
 ?>
